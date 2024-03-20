@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Online</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Tienda Online</h1>
+        <button id="cart-button">Carrito</button>
+        <button onclick="vaciarCarrito()">Vaciar Carrito</button>
+        </header>
+    <main id="product-list">
+        <!-- Aquí se mostrarán los productos -->
+    </main>
+    <div id="cart" class="hidden">
+                <!-- Aquí se mostrará el contenido del carrito -->
+        <button onclick="eliminarItem(id)">Eliminar Item</button>
+    </div>
+    <script src="json.js"></script>
+</body>
+</html>
