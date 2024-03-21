@@ -39,6 +39,18 @@ main {
     padding: 20px;
 }
 
+.borrar-curso {
+    background-color: red;
+    border-radius: 50%;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    margin-left: auto;
+    ;
+}
+
 .product {
     border: 3px solid #ccc;
     border-radius: 5px;
