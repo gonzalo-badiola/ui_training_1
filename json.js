@@ -32,14 +32,20 @@ async function displayProducts() {
 }
 
 // Agregar producto al carrito
-function addToCart(productId) {
-  const product = products.find((p) => p.id === productId);
-  if (product) {
-    const cartItem = document.createElement("div");
-    cartItem.setAttribute("id", product.id)
-    cartItem.innerHTML = `<button class="borrar-curso" onclick="deleteProduct(${product.id})">X</button> <img src="${product.image}" width=100> <br>
-     ${product.title} <br> Precio: $${product.price} <hr>`;
-    cart.appendChild(cartItem);
+async function addToCart(productId) {
+  try {
+    
+    const products = await productsPromise; // Esperar a que se resuelva la promesa de los productos
+    const product = products.find((p) => p.id === productId);
+    if (product) {
+      const cartItem = document.createElement("div");
+      cartItem.setAttribute("id", product.id);
+      cartItem.innerHTML = `<button class="borrar-curso" onclick="deleteProduct(${product.id})">X</button> <img src="${product.image}" width=100> <br>
+       ${product.title} <br> Precio: $${product.price} <hr>`;
+      cart.appendChild(cartItem);
+    }
+  } catch (error) {
+    console.error('Error al agregar producto al carrito:', error);
   }
 }
 
