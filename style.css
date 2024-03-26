@@ -39,7 +39,7 @@ main {
     padding: 20px;
 }
 
-.borrar-curso {
+.delete-product {
     background-color: red;
     border-radius: 50%;
     padding: 5px 10px;

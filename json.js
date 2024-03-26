@@ -2,14 +2,12 @@ const productList = document.getElementById("product-list");
 const cartButton = document.getElementById("cart-button");
 const cart = document.getElementById("cart");
 
+// Obtener el carrito del localStorage al cargar la página
+let cartItems = JSON.parse(localStorage.getItem("cartItems"));
 
 // Datos de ejemplo de productos
 let productsPromise = fetch('https://fakestoreapi.com/products')
-  .then(response => response.json())
-  .catch(error => {
-    console.error('Error:', error);
-    return []; // En caso de error, devolver un array vacío
-  });
+  .then(response => response.json());
 
 // Mostrar productos en la página
 async function displayProducts() {
@@ -34,19 +32,28 @@ async function displayProducts() {
 // Agregar producto al carrito
 async function addToCart(productId) {
   try {
-    
-    const products = await productsPromise; // Esperar a que se resuelva la promesa de los productos
+    const products = await productsPromise;
     const product = products.find((p) => p.id === productId);
     if (product) {
-      const cartItem = document.createElement("div");
-      cartItem.setAttribute("id", product.id);
-      cartItem.innerHTML = `<button class="borrar-curso" onclick="deleteProduct(${product.id})">X</button> <img src="${product.image}" width=100> <br>
-       ${product.title} <br> Precio: $${product.price} <hr>`;
-      cart.appendChild(cartItem);
+      cartItems.push(product); // Agregar el producto al array del carrito
+      localStorage.setItem("cartItems", JSON.stringify(cartItems)); // Guardar el carrito en localStorage
+      renderCart(); // Renderizar el carrito actualizado
     }
   } catch (error) {
     console.error('Error al agregar producto al carrito:', error);
   }
+}
+
+// Renderizar el carrito
+function renderCart() {
+  cart.innerHTML = ""; // Limpiar el contenido del carrito antes de renderizar de nuevo
+  cartItems.forEach((product) => {
+    const cartItem = document.createElement("div");
+    cartItem.setAttribute("id", product.id);
+    cartItem.innerHTML = `<button class="delete-product" onclick="deleteProduct(${product.id})">X</button> <img src="${product.image}" width=100> <br>
+       ${product.title} <br> Precio: $${product.price} <hr>`;
+    cart.appendChild(cartItem);
+  });
 }
 
 // Mostrar o ocultar el carrito
@@ -55,14 +62,19 @@ cartButton.addEventListener("click", () => {
 });
 
 function deleteProduct(id) {
-  const productToRemove = document.getElementById(`${id}`);
-  if (productToRemove) {
-    productToRemove.remove();
-  }
+  cartItems = cartItems.filter((item) => item.id !== id); // Eliminar el producto del array del carrito
+  localStorage.setItem("cartItems", JSON.stringify(cartItems)); // Actualizar el carrito en localStorage
+  renderCart(); // Renderizar el carrito actualizado
 }
 
 function vaciarCarrito() {
-  cart.innerHTML = "";
+  cartItems = []; // Vaciar el array del carrito
+  localStorage.removeItem("cartItems"); // Eliminar el carrito del localStorage
+  cart.innerHTML = ""; // Limpiar el contenido del carrito en la página
 }
+
 // Mostrar productos al cargar la página
-window.onload = displayProducts;
+window.onload = () => {
+  displayProducts();
+  renderCart(); // Renderizar el carrito guardado en localStorage
+};
